@@ -1,7 +1,9 @@
 """The Bot django data model.
 """
 from django.db import models
+from django.db.models.signals import pre_save
 from django.utils import timezone
+from django.dispatch import receiver
 
 from core.models import UUIDModel
 
@@ -20,7 +22,7 @@ class TwitterAccount(UUIDModel):
     """Twitter reference account.
     """
 
-    bot = models.ForeignKey('bot.Bot', related_name='account')
+    bots = models.ManyToManyField('bot.Bot', related_name='accounts')
 
     username = models.CharField(max_length=64)
     last_post_datetime = models.DateTimeField(blank=True, null=True)
@@ -33,3 +35,17 @@ class TwitterAccount(UUIDModel):
             return timezone.now() - self.last_post_timestamp
 
         return timezone.ZERO
+
+
+@receiver(pre_save, sender=TwitterAccount)
+def handle_twitter_account_create(sender, **kwargs):
+    """Makes sure our twitter account is valid and starts the listener job.
+    """
+    print('\n\nWorking on doing twitter things.\n\n')
+
+
+class TwitterAccountCorpus(UUIDModel):
+    """Where the NLP data from each twitter account is stored.
+    This will be optimized later to allow for multiple corpuses
+    to be retrieved at once.
+    """
