@@ -8,7 +8,11 @@ class UUIDModel(models.Model):
     """
 
     # pylint: disable=C0103
-    id = SmallUUIDField(default=uuid_typed_default(type=42))
+    id = SmallUUIDField(
+        default=uuid_typed_default(type=42),
+        editable=False,
+        primary_key=True
+        )
 
     class Meta:
         abstract = True
