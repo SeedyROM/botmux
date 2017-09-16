@@ -1,7 +1,5 @@
-"""Core module's models.
-"""
-
 from django.db import models
+
 from django_smalluuid.models import SmallUUIDField, uuid_typed_default
 
 
