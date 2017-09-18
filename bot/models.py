@@ -122,3 +122,4 @@ class TwitterAccountCorpus(UUIDModel):
     """
 
     twitter_account = models.ForeignKey('bot.TwitterAccount')
+    
