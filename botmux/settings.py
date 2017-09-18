@@ -140,6 +140,10 @@ RQ_QUEUES = {
     },
 }
 
+# Settings for storing markov chain files.
+MEDIA_ROOT = os.path.join(BASE_DIR, 'static/chains')
+MEDIA_URL = '/chains/'
+
 # Twitter API settings.
 TWITTER_CONSUMER_KEY = 'cMkzJMcdycNfVcPkXwEF3EjxJ'
 TWITTER_CONSUMER_SECRET = 'SrXN0XklmOOmpr6VvztTQwjM4KZSnvZVSbUPYs1hy2amR8VBlf'
