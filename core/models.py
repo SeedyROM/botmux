@@ -1,5 +1,4 @@
 from django.db import models
-
 from django_smalluuid.models import SmallUUIDField, uuid_typed_default
 
 
@@ -16,3 +15,4 @@ class UUIDModel(models.Model):
 
     class Meta:
         abstract = True
+

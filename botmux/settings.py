@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'django_extensions',
+    'django_rq',
     'core',
     'manager',
     'bot'
@@ -128,3 +129,19 @@ STATIC_URL = '/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
+
+# Redis settings.
+
+RQ_QUEUES = {
+    'default': {
+        'HOST': 'localhost',
+        'PORT': 6379,
+        'DB': 0,
+    },
+}
+
+# Twitter API settings.
+TWITTER_CONSUMER_KEY = 'cMkzJMcdycNfVcPkXwEF3EjxJ'
+TWITTER_CONSUMER_SECRET = 'SrXN0XklmOOmpr6VvztTQwjM4KZSnvZVSbUPYs1hy2amR8VBlf'
+TWITTER_ACCESS_TOKEN_KEY = '705542136939356160-U8DhtkquDkRe3Jk8tX6fk0WTUjuTQH5'
+TWITTER_ACCESS_TOKEN_SECRET = 'AE5BsQW7TXDoqfUA4rOaMZOmLILOhcUNaUiusUMv5NESu'
