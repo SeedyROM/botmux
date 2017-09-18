@@ -7,7 +7,6 @@ Django==1.11.5
 django-extensions==1.9.1
 django-rq==0.9.6
 django-smalluuid==1.1.1
-django-solo==1.1.2
 djangorestframework==3.6.4
 Faker==0.7.3
 idna==2.6
