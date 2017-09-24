@@ -10,24 +10,23 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
+import logging
 import os
 import sys
-import logging
+
+from .utils import load_environment_file
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '44+54g6l&l!rpi@xfq*m_i6qj&mdx0(pt#opx+ng2w^je$8226'
-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+load_environment_file(os.path.join(BASE_DIR, 'environment.ini'))
+
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', None)
+ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', '*').split()
 
 
 # Application definition
@@ -181,9 +180,3 @@ if '--no-logs' in sys.argv:
 # Settings for storing markov chain files.
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static/chains')
 MEDIA_URL = '/chains/'
-
-# Twitter API settings.
-TWITTER_CONSUMER_KEY = 'cMkzJMcdycNfVcPkXwEF3EjxJ'
-TWITTER_CONSUMER_SECRET = 'SrXN0XklmOOmpr6VvztTQwjM4KZSnvZVSbUPYs1hy2amR8VBlf'
-TWITTER_ACCESS_TOKEN_KEY = '705542136939356160-U8DhtkquDkRe3Jk8tX6fk0WTUjuTQH5'
-TWITTER_ACCESS_TOKEN_SECRET = 'AE5BsQW7TXDoqfUA4rOaMZOmLILOhcUNaUiusUMv5NESu'

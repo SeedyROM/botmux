@@ -1,13 +1,13 @@
 import json
 import os
-import zlib
 import re
+import zlib
 
 import markovify
 import requests
 
 from bot.signals import *
-from botmux import settings
+from django.conf import settings
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import Signal, receiver
 from django_rq import job as queue_job
@@ -82,10 +82,10 @@ def start_twitter_data_job(account_id):
     account = TwitterAccount.objects.get(id=account_id)
 
     api = TwitterAPI(
-        settings.TWITTER_CONSUMER_KEY,
-        settings.TWITTER_CONSUMER_SECRET,
-        settings.TWITTER_ACCESS_TOKEN_KEY,
-        settings.TWITTER_ACCESS_TOKEN_SECRET
+        os.environ.get('TWITTER_CONSUMER_KEY'),
+        os.environ.get('TWITTER_CONSUMER_SECRET'),
+        os.environ.get('TWITTER_ACCESS_TOKEN_KEY'),
+        os.environ.get('TWITTER_ACCESS_TOKEN_SECRET'),
         )
     
     timeline_data = api.request(
@@ -100,7 +100,9 @@ def start_twitter_data_job(account_id):
     tweets = json.loads(timeline_data.text)
 
     text_to_be_parsed = '\n'.join([tweet['text'] for tweet in tweets])
+    # Remove URLS.
     text_to_be_parsed = re.sub(r'http\S+', '', text_to_be_parsed)
+    # Remove tags.
     text_to_be_parsed = re.sub(r'@\S+', '', text_to_be_parsed)
 
     create_chain_file.delay(account=account, text=text_to_be_parsed)
