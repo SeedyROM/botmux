@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
 import os
+import sys
+import logging
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -42,7 +44,7 @@ INSTALLED_APPS = [
     'django_rq',
     'core',
     'manager',
-    'bot'
+    'bot.apps.BotConfig',
 ]
 
 MIDDLEWARE = [
@@ -139,6 +141,42 @@ RQ_QUEUES = {
         'DB': 0,
     },
 }
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "rq_console": {
+            "format": "%(asctime)s %(message)s",
+            "datefmt": "%H:%M:%S",
+        },
+    },
+    "handlers": {
+        "rq_console": {
+            "level": "DEBUG",
+            "class": "rq.utils.ColorizingStreamHandler",
+            "formatter": "rq_console",
+            "exclude": ["%(asctime)s"],
+        },
+    },
+    'loggers': {
+        "rq.worker": {
+            "handlers": ["rq_console"],
+            "level": "DEBUG"
+        },
+    }
+}
+
+if DEBUG or TESTING:
+    for queueConfig in RQ_QUEUES.values():
+        queueConfig['ASYNC'] = False
+
+# Hide logs
+
+if '--no-logs' in sys.argv:
+    print('> Disabling logging levels of CRITICAL and below.')
+    sys.argv.remove('--no-logs')
+    logging.disable(logging.CRITICAL)
 
 # Settings for storing markov chain files.
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static/chains')

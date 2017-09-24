@@ -9,7 +9,7 @@ from TwitterAPI import TwitterAPI
 from botmux import settings
 
 from .models import TwitterAccount, MarkovChain
-from .signals import account_processed, account_markov_complete
+from bot.signals import *
 
 
 @queue_job

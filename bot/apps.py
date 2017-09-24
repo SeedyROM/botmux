@@ -5,5 +5,5 @@ class BotConfig(AppConfig):
     name = 'bot'
 
     def ready(self):
-        from . import signals
-        # from . import jobs
+        import bot.jobs
+        import bot.signals

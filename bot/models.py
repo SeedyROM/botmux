@@ -1,11 +1,14 @@
 """The Bot django data model.
 """
+import json
 import time
+import zlib
 
-from django.db import models
-from django.utils import timezone
+import markovify
 
 from core.models import UUIDModel
+from django.db import models
+from django.utils import timezone
 
 
 class Bot(UUIDModel):
@@ -24,12 +27,14 @@ class TwitterAccount(UUIDModel):
 
     bots = models.ManyToManyField('bot.Bot', related_name='accounts')
 
+    markov_chain = models.OneToOneField('bot.MarkovChain', blank=True, null=True)
+
     username = models.CharField(max_length=64)
     last_post_datetime = models.DateTimeField(blank=True, null=True)
 
     def save(self, *args, **kwargs):
         """Casefold the username when the model
-        is saved for the first time.Casefold the username to avoid
+        is saved for the first time.
         """
         if not self.pk:
             self.username = self.username.casefold()
@@ -45,6 +50,13 @@ class TwitterAccount(UUIDModel):
 
         return timezone.ZERO
 
+    def get_uncompressed_chain(self):
+        chain_json = zlib.decompress(
+            self.markov_chain.json_file.read()
+            )
+        uncompressed_chain = markovify.Text.from_json(chain_json)
+        return uncompressed_chain
+
 
 class MarkovChain(UUIDModel):
     """Where the NLP data from each twitter account is stored.
@@ -52,7 +64,6 @@ class MarkovChain(UUIDModel):
     to be retrieved at once.
     """
 
-    twitter_account = models.ForeignKey('bot.TwitterAccount')
     json_file = models.FileField(upload_to='chains', blank=True, null=True)
 
     @property
