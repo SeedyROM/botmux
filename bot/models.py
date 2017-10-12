@@ -54,6 +54,7 @@ class TwitterAccount(UUIDModel):
         chain_json = zlib.decompress(
             self.markov_chain.json_file.read()
             )
+        
         uncompressed_chain = markovify.Text.from_json(chain_json)
         return uncompressed_chain
 

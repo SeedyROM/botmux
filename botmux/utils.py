@@ -51,7 +51,6 @@ def load_environment_file(envfile, key_length=64):
                 'Missing `django` section in the environment file.'
                 )
 
-
         if not config.get('django', 'secret_key', fallback=None):
             raise ImproperlyConfigured(
                 'Missing `secret_key` in django \

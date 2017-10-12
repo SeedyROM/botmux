@@ -39,12 +39,16 @@ class TwitterAccountCase(TestCase):
         self.assertEqual(chain_id, str(account.id))
 
     def test_generates_sentences(self):
-        account = TwitterAccount.objects.create(username='dril')
+        account = TwitterAccount.objects.create(username='horse_ebooks')
 
         get_worker().work(burst=True)
 
         account.refresh_from_db()
-        sentence = account.get_uncompressed_chain().make_sentence(tries=100)
+        chain = account.get_uncompressed_chain()
+        sentence = chain.make_sentence(tries=100)
+
+        import pdb; pdb.set_trace()
+        print(sentence)
 
         self.assertIsNotNone(sentence)
 

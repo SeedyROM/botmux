@@ -6,7 +6,6 @@ import zlib
 import markovify
 import requests
 
-from bot.signals import *
 from django.conf import settings
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import Signal, receiver
@@ -59,7 +58,7 @@ def confirm_markov_created(account):
 
 @queue_job
 def create_chain_file(account, text):
-    text_model = markovify.NewlineText(text)
+    text_model = markovify.NewlineText(text, state_size=2)
 
     chain_file_path = os.path.join(
         settings.MEDIA_ROOT,
@@ -94,7 +93,7 @@ def start_twitter_data_job(account_id):
             'screen_name': account.username,
             'include_rts': 'false',
             'trim_user': 'true',
-            'count': 1000  # Will be 3200
+            'count': 3200  # Will be 3200
         }
         )
     tweets = json.loads(timeline_data.text)
