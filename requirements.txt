@@ -35,5 +35,5 @@ six==1.10.0
 smalluuid==1.0.0
 TwitterAPI==2.4.6
 Unidecode==0.4.21
-urllib3==1.22
+urllib3==1.26.5
 wrapt==1.10.11
